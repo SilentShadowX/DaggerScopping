@@ -31,7 +31,7 @@ class MainPresenterImpl @Inject constructor(
     }
 
     override fun doExampleNetworkCall() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        
     }
 
     override fun logoutUser() {
