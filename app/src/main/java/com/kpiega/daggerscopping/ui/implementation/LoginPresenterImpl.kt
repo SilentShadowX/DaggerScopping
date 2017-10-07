@@ -8,6 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -18,6 +19,27 @@ class LoginPresenterImpl @Inject constructor(
 
     override fun attachView(view: LoginView) {
         this.view = view
+
+        if(userManager.listUser.size < 1)
+            userManager.listUser.addAll(
+                    mutableListOf(
+                            User(
+                                    name = "Kamil", lastname = "P",
+                                    login = "Kamil", password = "P",
+                                    token = UUID.randomUUID().toString()
+                            ),
+                            User(
+                                    name = "Łukasz", lastname = "F",
+                                    login = "Łukasz", password = "F",
+                                    token = UUID.randomUUID().toString()
+                            ),
+                            User(
+                                    name = "Artur", lastname = "D",
+                                    login = "Artur", password = "D",
+                                    token = UUID.randomUUID().toString()
+                            )
+                    )
+            )
     }
 
     override fun detachView() {
@@ -44,7 +66,8 @@ class LoginPresenterImpl @Inject constructor(
         if(login != "" && password != "") {
             userManager.createUserSession(User(
                     name = login, lastname = password,
-                    login = login, password = password
+                    login = login, password = password,
+                    token = UUID.randomUUID().toString()
             ))
             view?.unlockButton()
             view?.hideLoading()

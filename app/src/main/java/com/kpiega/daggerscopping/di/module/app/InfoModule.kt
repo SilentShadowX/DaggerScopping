@@ -10,7 +10,6 @@ import dagger.Provides
 class InfoModule {
 
     @Provides
-    @AppScope
     @ServerInfo
     fun provideHttpAddress() = SERVER_ADDRESS
 

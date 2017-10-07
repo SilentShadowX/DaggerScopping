@@ -5,6 +5,7 @@ import com.kpiega.daggerscopping.ScopeApp
 import com.kpiega.daggerscopping.controler.UserManager
 import com.kpiega.daggerscopping.di.module.app.activity.ActivityBindingModule
 import com.kpiega.daggerscopping.di.module.app.AppModule
+import com.kpiega.daggerscopping.di.module.app.InfoModule
 import com.kpiega.daggerscopping.di.scope.AppScope
 import dagger.BindsInstance
 import dagger.Component
@@ -16,11 +17,13 @@ import dagger.android.support.DaggerApplication
 @Component(modules = arrayOf(
         AndroidSupportInjectionModule::class,
         AppModule::class,
+        InfoModule::class,
         ActivityBindingModule::class
 ))
 interface AppComponent: AndroidInjector<DaggerApplication> {
 
     val userManager: UserManager
+    val application: Application
 
     @Component.Builder
     interface Builder {

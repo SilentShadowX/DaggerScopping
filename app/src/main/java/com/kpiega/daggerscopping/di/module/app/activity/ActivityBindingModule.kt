@@ -8,6 +8,7 @@ import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ActivityBindingModule {
+
     @ActivityScope
     @ContributesAndroidInjector(modules = arrayOf(
             LoginModule::class)

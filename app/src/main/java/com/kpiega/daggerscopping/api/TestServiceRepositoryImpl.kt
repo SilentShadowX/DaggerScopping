@@ -1,5 +1,6 @@
 package com.kpiega.daggerscopping.api
 
+import com.kpiega.daggerscopping.di.scope.ActivityScope
 import com.kpiega.daggerscopping.model.User
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
@@ -7,8 +8,9 @@ import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
+import javax.inject.Inject
 
-class TestServiceRepositoryImpl(val service: TestService) : TestServiceRepository {
+class TestServiceRepositoryImpl @Inject constructor(val service: TestService) : TestServiceRepository {
 
     override fun makeTestRequest(user: User): Observable<String> {
         return service.testService(TestRequest(user.getFullName()))

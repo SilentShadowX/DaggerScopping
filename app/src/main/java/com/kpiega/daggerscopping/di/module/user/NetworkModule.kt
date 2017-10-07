@@ -7,9 +7,12 @@ import com.google.gson.GsonBuilder
 import com.kpiega.daggerscopping.di.module.qualifier.ServerInfo
 import com.kpiega.daggerscopping.di.module.app.InfoModule
 import com.kpiega.daggerscopping.di.scope.AppScope
+import com.kpiega.daggerscopping.di.scope.UserScope
+import com.kpiega.daggerscopping.model.User
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -23,7 +26,7 @@ import java.io.File
 class NetworkModule {
 
     @Provides
-    @AppScope
+    @UserScope
     fun provideCacheFile(context: Application): File {
         val cacheFile = File(context.cacheDir, "http_cache")
         cacheFile.mkdir()
@@ -31,27 +34,45 @@ class NetworkModule {
     }
 
     @Provides
-    @AppScope
+    @UserScope
     fun provideCache(file: File) = Cache(file, 10 * 1024 * 1024)
 
     @Provides
-    @AppScope
+    @UserScope
+    fun provideAuthenticationToken(user: User): AuthInterceptor {
+        return AuthInterceptor(user.token)
+    }
+
+    @Provides
+    @UserScope
+    fun provideAuthenticationLogging(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+    @Provides
+    @UserScope
     fun provideHttpClient(
+            authInterceptor: AuthInterceptor,
             logger: HttpLoggingInterceptor,
             cache: Cache
     ) = OkHttpClient.Builder()
             .addInterceptor(logger)
+            .addInterceptor(authInterceptor)
             .cache(cache)
             .build()
 
 
     @Provides
-    @AppScope
+    @UserScope
     fun provideGson() =  GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
     @Provides
-    @AppScope
-    fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson, @ServerInfo url: String) = Retrofit.Builder()
+    @UserScope
+    fun provideRetrofit(
+            okHttpClient: OkHttpClient,
+            gson: Gson,
+            @ServerInfo url: String
+    ) = Retrofit.Builder()
             .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
