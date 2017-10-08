@@ -8,6 +8,7 @@ import com.kpiega.daggerscopping.R
 import com.kpiega.daggerscopping.base.BaseActivity
 import com.kpiega.daggerscopping.ui.presenters.LoginPresenter
 import com.kpiega.daggerscopping.ui.views.LoginView
+import com.kpiega.sub_activities.module.SubProjectModule
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -28,8 +29,12 @@ class LoginActivity : BaseActivity(), LoginView {
     }
 
     fun initInteraction() {
-        LoginButton.setOnClickListener {
-            _ -> presenter.doLogin()
+        LoginButton.setOnClickListener { _ ->
+            presenter.doLogin()
+        }
+
+        LoginButton.setOnLongClickListener { _ ->
+            SubProjectModule.redirect?.startSubProjectActivity(this@LoginActivity); true
         }
     }
 

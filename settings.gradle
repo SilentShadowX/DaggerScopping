@@ -1,1 +1,7 @@
 include ':app'
+
+include 'sub_interface'
+project(':sub_interface').projectDir = new File("..//DaggerScoopingSubProject//sub_interface")
+
+include 'sub_activities'
+project(':sub_activities').projectDir = new File("..//DaggerScoopingSubProject//sub_activities")
