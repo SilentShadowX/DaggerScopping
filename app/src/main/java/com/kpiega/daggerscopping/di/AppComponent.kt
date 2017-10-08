@@ -24,7 +24,6 @@ import dagger.android.support.DaggerApplication
 interface AppComponent: AndroidInjector<DaggerApplication>, InterComponentInterface {
 
     val userManager: UserManager
-    val application: Application
 
     @Component.Builder
     interface Builder {
