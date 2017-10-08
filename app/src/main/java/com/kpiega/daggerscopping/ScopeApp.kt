@@ -2,17 +2,17 @@ package com.kpiega.daggerscopping
 
 import android.app.Activity
 import android.app.Application
-import android.content.Intent
+import com.kpiega.daggerscopping.api.TestServiceRepository
 import com.kpiega.daggerscopping.di.AppComponent
 import com.kpiega.daggerscopping.di.DaggerAppComponent
-import com.kpiega.sub_activities.SubMainActivity
-import com.kpiega.sub_activities.module.SubProjectModule
-import com.kpiega.sub_interface.SubProjectInterface
-import com.kpiega.sub_interface.app.SubProjectApplication
-import com.kpiega.sub_interface.app.SubProjectPreference
+import com.kpiega.sub_activities.di.DaggerSecondModuleComponent
+import com.kpiega.sub_activities.di.SecondModuleComponent
+import com.kpiega.sub_interface.interfaces.ModulePreference
+import com.kpiega.sub_interface.interfaces.ModuleRequstsNetwork
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import io.reactivex.Observable
 import javax.inject.Inject
 
 class ScopeApp : Application(), HasActivityInjector {
@@ -21,6 +21,10 @@ class ScopeApp : Application(), HasActivityInjector {
 
     lateinit var appComponent: AppComponent
         private set
+
+    lateinit var moduleComponent: SecondModuleComponent
+
+    lateinit var testServiceRepo: TestServiceRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -34,29 +38,24 @@ class ScopeApp : Application(), HasActivityInjector {
     }
 
     fun initModule() {
-        SubProjectModule.redirect = redirectApp()
-        SubProjectModule.appModule = provideApp(this)
-        SubProjectModule.preferences = providePreferences()
 
-        SubProjectModule.appComponent = appComponent
-    }
-
-    fun redirectApp() = object: SubProjectInterface {
-        override fun startSubProjectActivity(activity: Activity) {
-            activity.startActivity(Intent(activity, SubMainActivity::class.java))
-        }
+        moduleComponent = DaggerSecondModuleComponent.builder()
+                .appComponent(appComponent)
+                .buildNetworkRequest(provideRequestNetwork())
+                .buildPreference(providePreference())
+                .build()
 
     }
 
-    fun provideApp(app: Application) = object : SubProjectApplication {
-        override fun provideAppContext(): Application {
-            return app
-        }
+    private fun providePreference() = object: ModulePreference {
+        override fun isAttachToCore() = true
+        override fun moduleWelcomeText() = "Hello my friend! Core here!"
     }
 
-    fun providePreferences() = object : SubProjectPreference {
-        override fun moduleWelcomeText(): String {
-            return "Main app project - Welcome!"
+
+    private fun provideRequestNetwork() = object: ModuleRequstsNetwork {
+        override fun dowloadModuleData(data: String): Observable<String> {
+            return testServiceRepo.makeDataRequest(data)
         }
     }
 
@@ -79,3 +78,5 @@ class ScopeApp : Application(), HasActivityInjector {
 
 
 }
+
+

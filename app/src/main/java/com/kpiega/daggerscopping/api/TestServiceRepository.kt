@@ -6,5 +6,6 @@ import io.reactivex.Observable
 interface TestServiceRepository {
 
     fun makeTestRequest(user: User): Observable<String>
+    fun makeDataRequest(data: String): Observable<String>
 
 }

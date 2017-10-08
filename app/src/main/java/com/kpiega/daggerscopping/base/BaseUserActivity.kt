@@ -3,7 +3,7 @@ package com.kpiega.daggerscopping.base
 import android.os.Bundle
 import com.kpiega.daggerscopping.ScopeApp
 import com.kpiega.daggerscopping.controler.UserManager
-import com.kpiega.sub_interface.di.utils.UserInjection
+import com.kpiega.daggerscopping.di.UserInjection
 
 abstract class BaseUserActivity : BaseActivity(){
 

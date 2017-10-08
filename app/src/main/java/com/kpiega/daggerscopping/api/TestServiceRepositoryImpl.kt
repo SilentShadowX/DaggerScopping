@@ -37,4 +37,29 @@ class TestServiceRepositoryImpl @Inject constructor(val service: TestService) : 
                 )
     }
 
+    override fun makeDataRequest(data: String): Observable<String> {
+        return service.testService(TestRequestData(data))
+                .subscribeOn(Schedulers.io())
+                .map { "Network response: ${it.data} " }
+                .onErrorResumeNext(
+                        Function { error ->
+                            when (error) {
+                                is HttpException -> {
+                                    ObservableSource {
+                                        it.onNext("HttpException handler")
+                                    }
+                                }
+                                is SocketTimeoutException -> {
+                                    ObservableSource {
+                                        it.onNext("Timeout exception handler")
+                                    }
+                                }
+                                else -> {
+                                    Observable.error(error)
+                                }
+                            }
+                        }
+                )
+    }
+
 }

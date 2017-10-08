@@ -12,6 +12,9 @@ interface TestService {
     @POST("api/values")
     fun testService(@Body request: TestRequest): Observable<TestResponse>
 
+    @POST("api/values")
+    fun testService(@Body request: TestRequestData): Observable<TestResponseData>
+
 }
 
 data class TestResponse(
@@ -19,5 +22,13 @@ data class TestResponse(
 )
 
 data class TestRequest(
+        @SerializedName("data") val data: String
+)
+
+data class TestRequestData(
+        @SerializedName("data") val data: String
+)
+
+data class TestResponseData(
         @SerializedName("data") val data: String
 )

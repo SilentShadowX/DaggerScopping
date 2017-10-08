@@ -34,7 +34,8 @@ class LoginActivity : BaseActivity(), LoginView {
         }
 
         LoginButton.setOnLongClickListener { _ ->
-            SubProjectModule.redirect?.startSubProjectActivity(this@LoginActivity); true
+//            SubProjectModule.redirect?.startSubProjectActivity(this@LoginActivity); true
+            true
         }
     }
 
