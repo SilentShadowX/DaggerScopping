@@ -35,7 +35,6 @@ class ScopeApp : Application(), HasActivityInjector, HasSubModule {
         override fun makeDataRequest(data: String): Observable<String> {
             return Observable.just("makeTestRequest")
         }
-
     }
 
     override fun onCreate() {
