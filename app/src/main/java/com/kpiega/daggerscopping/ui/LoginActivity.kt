@@ -2,13 +2,12 @@ package com.kpiega.daggerscopping.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import com.kpiega.daggerscopping.R
 import com.kpiega.daggerscopping.base.BaseActivity
 import com.kpiega.daggerscopping.ui.presenters.LoginPresenter
 import com.kpiega.daggerscopping.ui.views.LoginView
-import com.kpiega.sub_activities.module.SubProjectModule
+import com.kpiega.sub_activities.manager.ModuleManager
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -16,6 +15,9 @@ class LoginActivity : BaseActivity(), LoginView {
 
     @Inject
     lateinit var presenter: LoginPresenter
+
+    @Inject
+    lateinit var moduleManager: ModuleManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +36,7 @@ class LoginActivity : BaseActivity(), LoginView {
         }
 
         LoginButton.setOnLongClickListener { _ ->
-//            SubProjectModule.redirect?.startSubProjectActivity(this@LoginActivity); true
+            moduleManager.startModuleMainActivity(this)
             true
         }
     }

@@ -16,7 +16,4 @@ abstract class ActivityBindingModule {
     )
     abstract fun loginActivity(): LoginActivity
 
-    @ActivityScope
-    @ContributesAndroidInjector
-    abstract fun subMainActivity(): SubMainActivity
 }
